@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Häid jõule, Stefan</title>
+  <style>
+    :root{--bg1:#0b3d2e;--bg2:#063a5a;--card:#fffef6}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    body{
+      /* kata.jpg kasutatakse taustapildina — pane faili sama kataloogi */
+      background:
+        linear-gradient(180deg, rgba(6,58,90,0.55), rgba(11,61,46,0.55)),
+        url('kata(3).jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color:#fff;display:flex;align-items:center;justify-content:center;padding:24px;
+    }
+    .card{background:var(--card);color:#073b2b;padding:28px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.5);width:100%;max-width:420px;text-align:center}
+    h1{margin:0 0 10px;font-size:1.6rem}
+    p.lead{margin:0 0 18px;color:#0b3d2e;opacity:0.9}
+    .controls{display:flex;gap:8px;justify-content:center;align-items:center}
+    input[type="password"]{padding:10px 12px;border-radius:8px;border:1px solid #dfe7e2;min-width:0;flex:1}
+    button{padding:10px 14px;border-radius:8px;border:0;background:#0b8454;color:#fff;cursor:pointer}
+    button.secondary{background:#8b0000}
+    #message{min-height:24px;margin-top:12px;font-weight:600}
+    a.next{display:inline-block;text-decoration:none;margin-top:12px}
+    @media (max-width:420px){.card{padding:20px}}
+  </style>
+</head>
+<body>
+  <main class="card" role="main" aria-labelledby="title">
+    <h1 id="title">Häid jõule, Stefan 🎄</h1>
+    <p class="lead">Sisesta parool, et avada järgmine leht.</p>
+
+    <div class="controls" style="margin-bottom:8px;">
+      <input id="password" type="password" placeholder="Sisesta parool" aria-label="parool" />
+      <button id="checkBtn">Kontrolli</button>
+    </div>
+
+    <div id="message" aria-live="polite"></div>
+
+    <div>
+      <a id="nextLink" class="next" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&fs=1" style="display:none;">
+        <button id="nextBtn" type="button">Järgmine leht ➜</button>
+      </a>
+    </div>
+  </main>
+
+  <script>
+    // lihtne kliendipoolne parooli kontroll (muuda 'stefan' vastavalt soovile)
+    const CORRECT = 'stefan';
+    const ERRORS = [
+      'Vale parool — päkapikk läks vale puu juurde.',
+      'Ups! Kata ei luba sind sisse.',
+      'Parool ei vasta. Piparkoogid jäid ahju.',
+      'Jõuluvana unustas parooli, proovi uuesti.',
+      'Nope — proovime veel korra.',
+      'Päkapikk tegi vea. Vale parool.',
+      'Parool ei klapi. Jõuluvana naerab.',
+      'Ei õnnestunud. Jõuluvana on kuri.'
+    ];
+
+    const pwd = document.getElementById('password');
+    const chk = document.getElementById('checkBtn');
+    const msg = document.getElementById('message');
+    const nextLink = document.getElementById('nextLink');
+
+    function showRandomError(){
+      const t = ERRORS[Math.floor(Math.random()*ERRORS.length)];
+      msg.textContent = t;
+      msg.style.color = '#8b0000';
+      nextLink.style.display = 'none';
+    }
+
+    function unlock(){
+      msg.textContent = 'Tõepoolest! Saad edasi minna. 🎁';
+      msg.style.color = '#0b8454';
+      nextLink.style.display = 'inline-block';
+    }
+
+    function check(){
+      const v = (pwd.value || '').trim();
+      if(!v) {
+        msg.textContent = 'Sisesta parool.';
+        msg.style.color = '#8b0000';
+        nextLink.style.display = 'none';
+        return;
+      }
+      if(v === CORRECT) unlock();
+      else showRandomError();
+    }
+
+    chk.addEventListener('click', check);
+    pwd.addEventListener('keydown', e => { if(e.key === 'Enter') check(); });
+
+    // väikene jõulumeeleolu — rõõmsaid helisid, mitte häiriv
+    // (kommentaar: heli ei lisata automaatselt, et leht jääks lihtsaks ja vaikseks)
+  </script>
+</body>
+</html>
